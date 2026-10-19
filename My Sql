@@ -1,0 +1,561 @@
+-- CREATE DATABASE 
+/*
+CREATE DATABASE college;
+*/
+
+--TO SELECT DATABASE IN MYSQL
+/*
+USE COLLEGE;
+*/
+
+
+--cREATE TABLE
+/*
+CREATE TABLE Students (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    age INT,
+    gender VARCHAR(10),
+    email VARCHAR(100)
+);
+*/
+
+--INSEERT DATA INTO TABLE
+/*
+INSERT INTO Students (id, name, age, gender, email)
+VALUES (1, 'Bhanu', 20, 'Male', 'bhanu@gmail.com');
+
+INSERT INTO Students (id, name, age, gender, email)
+VALUES (2, 'Prabhat', 21, 'Male', 'prabhat@gmail.com');
+
+INSERT INTO Students (id, name, age, gender, email)
+VALUES (3, 'Saksham', 21, 'Male', 'saksham@gmail.com');
+*/
+
+--DISPLAY DATA SELECTED FROM TABLE
+/*
+-- Display all columns
+SELECT * FROM Students;
+
+-- Display specific columns
+SELECT name, age FROM Students;
+
+-- Display unique values
+SELECT DISTINCT age FROM Students;
+*/
+
+-- wHERE CONDITION
+/*
+SELECT * FROM Students WHERE age = 20;
+
+SELECT * FROM Students WHERE age > 20;
+
+SELECT * FROM Students WHERE age < 21;
+
+SELECT * FROM Students WHERE age >= 21;
+
+SELECT * FROM Students WHERE age <> 20;
+*/
+
+
+--AND,OR AND NOT CONDITION
+/*
+SELECT * FROM Students
+WHERE age >= 20 AND gender = 'Male';
+
+SELECT * FROM Students
+WHERE age = 20 OR age = 21;
+
+SELECT * FROM Students
+WHERE NOT age = 20;
+*/
+
+
+-- BETWEEN IN AND LIKE CONDITION
+/*
+-- BETWEEN
+SELECT * FROM Students
+WHERE age BETWEEN 20 AND 22;
+
+-- IN
+SELECT * FROM Students
+WHERE age IN (20, 21);
+
+-- LIKE: names starting with B
+SELECT * FROM Students
+WHERE name LIKE 'B%';
+
+-- Names ending with t
+SELECT * FROM Students
+WHERE name LIKE '%t';
+
+-- Names containing ha
+SELECT * FROM Students
+WHERE name LIKE '%ha%';
+*/
+
+
+--UPDATE DATA IN TABLE
+/*
+UPDATE Students
+SET age = 22
+WHERE id = 2;
+*/
+
+
+--ORDER BY
+/*
+-- Ascending order
+SELECT * FROM Students
+ORDER BY age ASC;
+
+-- Descending order
+SELECT * FROM Students
+ORDER BY age DESC;
+
+-- Sort names alphabetically
+SELECT * FROM Students
+ORDER BY name ASC;
+*/
+
+
+--DELETE DATA 
+/*
+DELETE FROM Students
+WHERE id = 3;
+*/
+
+
+--ALTER TABLE
+/*
+-- Add a column
+ALTER TABLE Students
+ADD city VARCHAR(50);
+
+-- Remove a column
+ALTER TABLE Students
+DROP COLUMN city;
+
+-- Change a column's data type (MySQL)
+ALTER TABLE Students
+MODIFY name VARCHAR(100);
+*/
+
+
+--DROP AND TRUNCATE TABLE
+/*
+-- Remove all rows but keep the table
+TRUNCATE TABLE Students;
+
+-- Remove the complete table
+DROP TABLE Students;
+*/
+
+
+--CONSTRAINTS
+/*
+CREATE TABLE Employees (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    age INT CHECK (age >= 18),
+    city VARCHAR(50) DEFAULT 'Agra'
+);
+*/
+
+
+/*
+PRIMARY KEY — uniquely identifies each row.
+
+
+
+FOREIGN KEY — links related tables.
+
+
+
+NOT NULL — value cannot be NULL.
+
+
+
+UNIQUE — prevents duplicate values.
+
+
+
+CHECK — validates a condition.
+
+
+
+DEFAULT — provides a default value.
+*/
+
+
+--AUTO_INCREMENT
+/*
+CREATE TABLE Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+*/
+
+
+--AGGREGATE FUNCTIONS
+/*
+-- Count rows
+SELECT COUNT(*) FROM Students;
+
+-- Minimum age
+SELECT MIN(age) FROM Students;
+
+-- Maximum age
+SELECT MAX(age) FROM Students;
+
+-- Average age
+SELECT AVG(age) FROM Students;
+
+-- Sum of ages
+SELECT SUM(age) FROM Students;
+*/
+
+
+--GROUP BY AND HAVING
+/*
+SELECT age, COUNT(*) AS total
+FROM Students
+GROUP BY age;
+*/
+
+--Filter groups using HAVING:
+
+/*
+SELECT age, COUNT(*) AS total
+FROM Students
+GROUP BY age
+HAVING COUNT(*) > 1;
+*/
+
+--Difference: WHERE filters individual rows; HAVING filters groups.
+
+
+-- Create Two Tables for Joins
+/*
+CREATE TABLE Departments (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50)
+);
+*/
+
+/*
+CREATE TABLE Students (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    dept_id INT,
+    FOREIGN KEY (dept_id)
+        REFERENCES Departments(dept_id)
+);*/
+
+
+--Insert sample data:
+
+/*
+INSERT INTO Departments VALUES (10, 'CSE');
+INSERT INTO Departments VALUES (20, 'AI ML');
+
+INSERT INTO Students VALUES (1, 'Bhanu', 10);
+INSERT INTO Students VALUES (2, 'Prabhat', 20);
+INSERT INTO Students VALUES (3, 'Saksham', 10);
+*/
+
+
+--INNER JOIN
+/*
+Returns matching rows from both tables.
+SELECT Students.name, Departments.dept_name
+FROM Students
+INNER JOIN Departments
+ON Students.dept_id = Departments.dept_id;
+*/
+
+
+-- LEFT JOIN
+/*
+Returns all rows from the left table and matching rows from the right table.
+SELECT Students.name, Departments.dept_name
+FROM Students
+LEFT JOIN Departments
+ON Students.dept_id = Departments.dept_id;
+/*
+
+
+-- RIGHT JOIN
+/*
+Returns all rows from the right table and matching rows from the left table.
+SELECT Students.name, Departments.dept_name
+FROM Students
+RIGHT JOIN Departments
+ON Students.dept_id = Departments.dept_id;
+*/
+
+-- FULL OUTER JOIN
+/*
+Supported directly by Oracle and PostgreSQL, but not by MySQL.
+SELECT Students.name, Departments.dept_name
+FROM Students
+FULL OUTER JOIN Departments
+ON Students.dept_id = Departments.dept_id;
+*/
+
+-- CROSS JOIN
+/*
+Returns every possible combination of rows.
+SELECT Students.name, Departments.dept_name
+FROM Students
+CROSS JOIN Departments;
+*/
+
+-- SELF JOIN
+/*
+A table joins with itself. Example: employees and their managers.
+SELECT e.name AS Employee,
+       m.name AS Manager
+FROM Employees e
+LEFT JOIN Employees m
+ON e.manager_id = m.emp_id;
+*/
+
+This example assumes the Employees table contains manager_id.
+
+
+Subqueries
+Find students older than the average age:
+SELECT name, age
+FROM Students
+WHERE age > (
+    SELECT AVG(age)
+    FROM Students
+);
+
+
+Find students belonging to department 10 or 20:
+SELECT name
+FROM Students
+WHERE dept_id IN (
+    SELECT dept_id
+    FROM Departments
+    WHERE dept_id IN (10, 20)
+);
+
+
+25. EXISTS and NOT EXISTS
+-- Departments having students
+SELECT d.dept_name
+FROM Departments d
+WHERE EXISTS (
+    SELECT 1
+    FROM Students s
+    WHERE s.dept_id = d.dept_id
+);
+
+
+-- Departments without students
+SELECT d.dept_name
+FROM Departments d
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Students s
+    WHERE s.dept_id = d.dept_id
+);
+
+
+26. UNION and UNION ALL
+SELECT name FROM Students
+UNION
+SELECT dept_name FROM Departments;
+
+
+UNION removes duplicate rows; UNION ALL keeps duplicates.
+SELECT name FROM Students
+UNION ALL
+SELECT dept_name FROM Departments;
+
+
+Both queries must return the same number of compatible columns.
+27. NULL Handling
+-- Find missing emails
+SELECT * FROM Students
+WHERE email IS NULL;
+
+-- Find available emails
+SELECT * FROM Students
+WHERE email IS NOT NULL;
+
+
+Replace NULL values in query results:
+
+SELECT name, COALESCE(email, 'No email') AS email
+FROM Students;
+
+
+-- CASE Statement
+SELECT name, age,
+    CASE
+        WHEN age < 18 THEN 'Minor'
+        WHEN age <= 21 THEN 'Young'
+        ELSE 'Adult'
+    END AS category
+FROM Students;
+
+
+-- Views
+
+A view is a saved query that can be used like a table.
+
+CREATE VIEW AdultStudents AS
+SELECT id, name, age
+FROM Students
+WHERE age >= 18;
+
+SELECT * FROM AdultStudents;
+
+DROP VIEW AdultStudents;
+
+
+-- Indexes
+Indexes can speed up certain searches.
+
+CREATE INDEX idx_student_name
+ON Students(name);
+
+
+To remove an index, syntax depends on the database.
+
+MySQL:
+DROP INDEX idx_student_name ON Students;
+
+
+ Transactions — COMMIT and ROLLBACK
+
+START TRANSACTION;
+
+UPDATE Accounts
+
+SET balance = balance - 500
+WHERE account_id = 1;
+
+UPDATE Accounts
+SET balance = balance + 500
+WHERE account_id = 2;
+
+COMMIT;
+
+
+Cancel uncommitted changes instead:
+ROLLBACK;
+
+
+These commands assume an Accounts table exists. Oracle starts transactions implicitly rather than using START TRANSACTION in the same way as MySQL.
+
+
+-- SAVEPOINT
+SAVEPOINT before_update;
+
+UPDATE Students
+SET age = 22
+WHERE id = 1;
+
+ROLLBACK TO SAVEPOINT before_update;
+
+
+This rolls back changes made after the savepoint, subject to database-specific syntax.
+
+
+-- GRANT and REVOKE
+These commands control permissions; exact syntax and user setup depend on the DBMS.
+
+GRANT SELECT ON Students TO analyst_user;
+
+REVOKE SELECT ON Students FROM analyst_user;
+
+
+-- Find Duplicate Emails
+Common interview question:
+
+SELECT email
+FROM Person
+GROUP BY email
+HAVING COUNT(*) > 1;
+
+
+-- Employees Earning More Than Their Manager
+SELECT e.name AS Employee
+FROM Employee e
+JOIN Employee m
+ON e.managerId = m.id
+WHERE e.salary > m.salary;
+
+
+-- Customers Who Never Ordered
+
+SELECT c.name AS Customers
+FROM Customers c
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Orders o
+    WHERE o.customerId = c.id
+);
+
+
+-- Person and Address — LEFT JOIN
+Returns people even if they do not have an address.
+SELECT p.firstName,
+       p.lastName,
+       a.city,
+       a.state
+FROM Person p
+LEFT JOIN Address a
+ON p.personId = a.personId;
+
+
+-- Second-Highest Salary
+
+SELECT MAX(salary) AS second_highest_salary
+FROM Employee
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM Employee
+);
+
+
+This returns the second-highest distinct salary, or NULL if there is no second distinct value.
+
+
+-- Date and String Functions
+
+SELECT UPPER(name) FROM Students;
+
+SELECT LOWER(name) FROM Students;
+
+SELECT LENGTH(name) FROM Students;
+
+SELECT CURRENT_DATE;
+
+SELECT CURRENT_TIMESTAMP;
+
+
+Some functions and date calculations vary between MySQL and Oracle.
+
+
+/*
+Command	Purpose
+CREATE	Create a database object
+ALTER	Change table structure
+DROP	Remove a database object
+INSERT	Add rows
+SELECT	Read data
+UPDATE	Change data
+DELETE	Remove rows
+TRUNCATE	Remove all rows
+GRANT	Give permissions
+REVOKE	Remove permissions
+COMMIT	Save a transaction
+ROLLBACK	Undo uncommitted changes
+*/
